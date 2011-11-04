@@ -17,41 +17,50 @@
 </head>
 <body>
 	<div id="timeline"></div>
-	<script language="JavaScript" type="text/javascript" src="lib/prototype.1.6.1.mini.js"></script>
-	<script language="Javascript" type="text/javascript" src="lib/raphael-min.js"></script>
-	<script language="Javascript" type="text/javascript" src="lib/delorean.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../../lib/prototype.1.7.0.js"></script>
+	<script language="Javascript" type="text/javascript" src="../../lib/raphael.2.0.0.js"></script>
+	<script language="Javascript" type="text/javascript" src="../../src/delorean.js"></script>
 	<script language="Javascript" type="text/javascript">
 		var dates = [
-				
-				{
-					date: new Date('2010/09/10'),
-					label: '2 Days In',
-					color:'#f00',
-					textColor:'#600'
-				},
-				{
-					date: new Date('2010/09/10'),
-					label: 'In The Beginning',
-					color:'#0f0',
-					textColor:'#060'
-				},
-				{
-					date: new Date('2010/09/10'),
-					label: 'Running On Heavy Fuel',
-					color:'#0ff',
-					textColor:'#066'
-				},
-				{
-					date: new Date('2010/09/10'),
-					label: 'And Again',
-					color:'#0ff',
-					textColor:'#066'
-				},
-				{
-					date: new Date('2010/09/20'),
-					label: 'The Aftermath'
-				}
-		];
+                                 {
+                                     date: new Date('2011/10/23'),
+                                     label: "Claim Created",
+                                     color: "#dddd00",
+                                     textColor: "#EF9200"
+                                 },
+                                                                 {
+                                     date:new Date('2011/10/27'),
+                                     label:"Last Modified"
+                                 },
+                                                                {
+                                     date:new Date('2011/10/28'),
+                                     label:"Last Modified"
+                                 },
+                                                                                                 {
+                                     date:new Date('2011/10/23'),
+                                     label: "Invoice Date"
+                                 },
+                                                                                                 {
+                                     date:new Date('2011/10/23'),
+                                     label: "Invoice Received"
+                                 },
+                                                                                                                                                                 {
+                                    date:new Date('2011/10/23'),
+                                    label: 'Receipt Sent'
+                                 }, 
+                                                                 {
+                                    date:new Date('2011/10/28'),
+                                    label: 'Tracking Email Sent'
+                                 }, 
+                                                                                                  {
+                                    date:new Date('2011/10/28'),
+                                    label: 'Packaging Sent To Claimant'
+                                 }, 
+                                                                                                 {
+                                     date:new Date(),
+                                     label: "Now"
+                                 }
+                                                        ];
 		var timeline = new Delorean('timeline',dates);
 	</script>
 </body>

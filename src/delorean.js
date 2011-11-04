@@ -12,6 +12,7 @@ var Delorean = Class.create({
 				height:20,
 				start:null,
 				finish:null,
+				maxEvents:3,
 				dateFormat: 'd M Y',
 				date:{
 					size:9,
@@ -101,18 +102,22 @@ var Delorean = Class.create({
 				}
 			
 		},this);
- 	
+ 		
+ 		this.labels = this.paper.set();
+ 		
  		//plot start and finish markers
- 		 		
  		start = this.drawLabel(this.options.padding.left,y1,y2,labels.first(),alt);
  		finish = this.drawLabel(this.width-this.options.padding.right,(labels.length%2==0) ? y2 : y1,(labels.length%2==0) ? y1 : y2,labels.last(),(dates.length%2==0));
  		
+ 		this.labels.push(start);
+ 		this.labels.push(finish);
   		startBox = start.getBBox();
   		finishBox = finish.getBBox();
   		this.startPos = Math.round((startBox.x+(startBox.width/2)));
   		this.finishPos = Math.round((finishBox.x+(finishBox.width/2)));
  		inc = range/(this.finishPos - this.startPos);
- 		 		
+ 		
+ 		
  		dates.each(function(date,i){
  			x = this.startPos + Math.round(((date-this.start.getTime()) / inc));
  			textY = (alt) ? y1 : y2;
@@ -120,7 +125,7 @@ var Delorean = Class.create({
  			this.paper.path("M" + x + " " + y1 + "L" + x + " " + y2);
  			 			
  			if(i!=0 && i!=dates.length-1)
- 				label = this.drawLabel(x,dateY,textY,labels[i],alt);
+ 				this.labels.push(this.drawLabel(x,dateY,textY,labels[i],alt));
  			
  			alt = !alt;
  		},this);
@@ -132,35 +137,67 @@ var Delorean = Class.create({
  			labels=[],
  			dateLabel,
  			eventLabel,
- 			label=this.paper.set(),
+ 			label,
+ 			bg,
  			yMod = (alt) ? 1 : -1,
  			i,
  			y,
  			lBox,
  			maxWidth = 0,
- 			returnLabel = this.paper.set();
+ 			returnLabel = this.paper.set(),
+ 			moreBox = this.paper.set();
+ 			
+ 
  		
  		//draw date label
- 		console.log(dateY);
  		dateLabel = this.paper.text(x,dateY,this.formatDate(date,this.options.dateFormat)).attr({"fill":this.options.date.color,"text-anchor":"middle",'font-size':this.options.date.size,'font-weight':this.options.date.weight,'font-family':this.options.date.font});
  		returnLabel.push(dateLabel);
  		
  		//get event labels
  		for(i=0;i<dates.length;i++){
- 			y = dateY + (yMod*((i+1)*(dateLabel.getBBox().height + 11)));
- 			eventLabel = this.paper.text(x,y,dates[i].label).attr({"fill":dates[i].textColor || this.options.event.color,"text-anchor":"middle",'font-size':this.options.event.size,'font-weight':this.options.event.weight,'font-family':this.options.event.font});
- 			lBox = eventLabel.getBBox();
- 			returnLabel.push(this.paper.rect(lBox.x-4,lBox.y-4,lBox.width+8,lBox.height+8).attr({"stroke":this.options.event.border,"fill":'#fff'}));
-			returnLabel.push(this.paper.rect(lBox.x-2,lBox.y-2,lBox.width+4,lBox.height+4).attr({"fill":dates[i].color || this.options.event.fill,"stroke-opacity":0}));
-			eventLabel.toFront();
- 			returnLabel.push(eventLabel);
+ 				
+ 				if(i==this.options.maxEvents-1 && dates.length>this.options.maxEvents){
+ 					label = this.paper.set();
+ 					y = dateY + (yMod*((i+1)*(dateLabel.getBBox().height + 11)));
+ 					eventLabel = this.paper.text(x,y,"More...").attr({"fill":(dates[i].textColor && i<this.options.maxEvents-1) ? dates[i].textColor : this.options.event.color,"text-anchor":"middle",'font-size':this.options.event.size,'font-weight':this.options.event.weight,'font-family':this.options.event.font});
+ 					label.push(eventLabel);
+ 					lBox = eventLabel.getBBox();
+ 					label.push(this.paper.rect(lBox.x-4,lBox.y-4,lBox.width+8,lBox.height+8).attr({"stroke":this.options.event.border,"fill":'#fff'}));
+ 	 				label.push(this.paper.rect(lBox.x-2,lBox.y-2,lBox.width+4,lBox.height+4).attr({"fill":dates[i].color || this.options.event.fill,"stroke-opacity":0}));
+ 	 				eventLabel.toFront();
+ 	 				returnLabel.push(label);
+ 	 				label.attr("cursor","pointer");
+ 	 				label.mouseover(this.showMore.bind(moreBox,this,returnLabel));
+ 					label.mouseout(this.hideMore.bind(moreBox,this));
+ 				}
+
+ 				label = this.paper.set();
+	 				
+ 				if(i < this.options.maxEvents-1 || dates.length<=this.options.maxEvents)
+ 					y = dateY + (yMod*((i+1)*(dateLabel.getBBox().height + 11)));
+ 				else
+ 					y = (dateY-(yMod*this.options.height)) - (yMod*((i-this.options.maxEvents + 1.5)*(dateLabel.getBBox().height + 11)));
+ 				
+ 				eventLabel = this.paper.text(x,y,dates[i].label).attr({"fill":(dates[i].textColor && i<this.options.maxEvents-1) ? dates[i].textColor : this.options.event.color,"text-anchor":"middle",'font-size':this.options.event.size,'font-weight':this.options.event.weight,'font-family':this.options.event.font});
+ 				label.push(eventLabel);
+ 				lBox = eventLabel.getBBox();
+ 				label.push(this.paper.rect(lBox.x-4,lBox.y-4,lBox.width+8,lBox.height+8).attr({"stroke":this.options.event.border,"fill":'#fff'}));
+ 				label.push(this.paper.rect(lBox.x-2,lBox.y-2,lBox.width+4,lBox.height+4).attr({"fill":dates[i].color || this.options.event.fill,"stroke-opacity":0}));
+				eventLabel.toFront();
+ 				 				
+ 				if(i<this.options.maxEvents-1 || dates.length<=this.options.maxEvents)
+ 					returnLabel.push(label);
+ 				else
+ 					moreBox.push(label);
+ 			
  		}
  		
+ 		moreBox.hide();
+ 		
  		this.positionLabel(returnLabel,dateLabel.getBBox().height,alt);
- 		
+ 		this.positionLabel(moreBox,dateLabel.getBBox().height,!alt);
  		return returnLabel;
- 		
- 		
+ 		 		
  	},
  	positionLabel: function(label,lineHeight,alt){
  		var lBox = label.getBBox(),
@@ -194,9 +231,18 @@ var Delorean = Class.create({
  		} 		
  		
  	},
- 	getLabelYMod: function(index){
- 		
- 		return 2/((Math.ceil(index/2)*2)-1);
- 			
+ 	showMore: function(timeline,current){
+ 		timeline.labels.forEach(function(label){
+ 			if(current!=label)
+ 				label.attr("fill-opacity",1/3);
+ 		});
+ 		this.show();
+ 	},
+ 	hideMore: function(timeline){
+ 		timeline.labels.forEach(function(label){
+ 			label.attr("fill-opacity",1);
+ 		});
+ 		this.hide();
  	}
+ 	
 });
