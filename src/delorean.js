@@ -1,4 +1,5 @@
 var Delorean = Class.create({
+	version: '<%= VERSION %>',
 	initialize: function(element,dates,options){
 		//check element exists
 		if(!$(element))

@@ -1,2 +1,12 @@
 /.settings
-/.tmp_*
+
+.project
+pkg
+
+test/unit/tmp/*
+
+doc
+
+tmp
+
+dist/*
