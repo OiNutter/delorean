@@ -80,10 +80,8 @@ var Delorean = Class.create({
  	},
  	plotMarkers: function(){
  		
- 		var markers=this.paper.set(),
- 			labels = $A([]),
+ 		var labels = $A([]),
  			dates = $A([]),
- 			label,
  			x,
  			y1 = ((this.height/2)-(this.options.height/2)),
  			y2 = ((this.height/2)+(this.options.height/2)),
@@ -132,18 +130,14 @@ var Delorean = Class.create({
  	},
  	drawLabel: function(x,dateY,textY,dates,alt){
  		
- 		var labelTxt="",
- 			date = dates.first().date,
- 			labels=[],
+ 		var date = dates.first().date,
  			dateLabel,
  			eventLabel,
  			label,
- 			bg,
  			yMod = (alt) ? 1 : -1,
  			i,
  			y,
  			lBox,
- 			maxWidth = 0,
  			returnLabel = this.paper.set(),
  			moreBox = this.paper.set();
  			
