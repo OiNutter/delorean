@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Delorean</title>
+<link type="text/css" rel="stylesheet" href="css/examples.css" media="screen"/>
+</head>
+<body>
+	
+<div id="container">
+	<div id="header">
+		<h1>Delorean - Examples</h1>
+	</div>
+	<div id="middle">
+		<a name="top"></a>
+		<p>Here you'll find a selection of demos for the delorean library.  Click a link to jump to that chart type's demos.</p>
+		
+		<ul>
+			<li><a href="#basic">Basic</a></li>
+			<li><a href="#custom-colours">Custom Colours</a></li>
+			<li><a href="#stacking">Multiple Event Stacking</a></li>
+			<li><a href="#links">Further Links</a></li>
+		</ul>
+		
+		
+		
+		<hr/>
+		
+		<a name="basic"></a>
+		<h2>Basic</h2>
+				
+		<div class="timeline" id="basic-example"></div>
+		<h3>Basic timeline.</h3>
+		<a href="#top">Back To Top</a>
+		
+		<hr/>
+		
+		<a name="custom-colours"></a>
+		<h2>Custom Colours</h2>
+		<p>Events can be given a custom background and text colour.</p>
+		<div class="paper" id="colour-example"></div>
+		<h3>Basic chart with custom event colours.</h3>
+		<a href="#top">Back To Top</a>
+		
+		<hr/>
+		
+		<a name="stacking"></a>
+		<h2>Multiple Event Stacking</h2>
+		<p>If there a multiple events at the same date Delorean will stack them for you.</p>
+		<div class="paper" id="stacking-example"></div>
+		<h3>Stacking of multiple events on the same date.</h3>
+		<div class="paper" id="time-example-1"></div>
+		<h3>Overflow functionality for too many events. (Hover over the More... label)</h3>
+		<a href="#top">Back To Top</a>
+		
+		<hr/>
+		
+		<a name="links"></a>
+		<h2>Further Links</h2>
+		
+		<p>Check out the <a href="http://www.oinutter.co.uk/projects/delorean/">project page</a> or view the source and usage instructions on <a href="https://github.com/OiNutter/delorean">GitHub </a>. 
+		
+	</div>
+</div>
+<script language="JavaScript" type="text/javascript" src="js/pro.raph.delorean.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+	
+
+	document.observe('dom:loaded',function(){	
+	
+		var dates1 = [
+		  {
+		      date: new Date('1066/10/14'),
+		      label: "Battle of Hastings"
+		  },
+		  {
+		      date: new Date('1666/09/02'),
+		      label: "Great Fire of London"
+		  },
+		  {
+		      date: new Date('1955/11/05'),
+		      label: "Invention of the flux capacitor"
+		  },
+		  {
+		      date: new Date('1977/05/05'),
+		      label: "Star Wars Released"  
+		  },
+		  {
+		      date: new Date('1984/01/24'),
+		      label: "First Macintosh computer introduced"
+		  },
+		  {
+		      date: new Date('2011/11/07'),
+		      label: "Delorean 0.2.0 released"
+		  }
+		]
+		
+	});
+
+</script>
+</body>
+</html>
