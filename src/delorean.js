@@ -154,11 +154,13 @@ var Delorean = Class.create({
  					label = this.paper.set();
  					y = dateY + (yMod*((i+1)*(dateLabel.getBBox().height + 11)));
  					eventLabel = this.paper.text(x,y,"More...").attr({"fill":(dates[i].textColor && i<this.options.maxEvents-1) ? dates[i].textColor : this.options.event.color,"text-anchor":"middle",'font-size':this.options.event.size,'font-weight':this.options.event.weight,'font-family':this.options.event.font});
- 					label.push(eventLabel);
+ 					
  					lBox = eventLabel.getBBox();
  					label.push(this.paper.rect(lBox.x-4,lBox.y-4,lBox.width+8,lBox.height+8).attr({"stroke":this.options.event.border,"fill":'#fff'}));
  	 				label.push(this.paper.rect(lBox.x-2,lBox.y-2,lBox.width+4,lBox.height+4).attr({"fill":dates[i].color || this.options.event.fill,"stroke-opacity":0}));
+ 	 				label.push(eventLabel);
  	 				eventLabel.toFront();
+ 	 				
  	 				returnLabel.push(label);
  	 				label.attr("cursor","pointer");
  	 				label.mouseover(this.showMore.bind(moreBox,this,returnLabel));
@@ -173,11 +175,13 @@ var Delorean = Class.create({
  					y = (dateY-(yMod*this.options.height)) - (yMod*((i-this.options.maxEvents + 1.5)*(dateLabel.getBBox().height + 11)));
  				
  				eventLabel = this.paper.text(x,y,dates[i].label).attr({"fill":(dates[i].textColor && i<this.options.maxEvents-1) ? dates[i].textColor : this.options.event.color,"text-anchor":"middle",'font-size':this.options.event.size,'font-weight':this.options.event.weight,'font-family':this.options.event.font});
- 				label.push(eventLabel);
+ 				
  				lBox = eventLabel.getBBox();
  				label.push(this.paper.rect(lBox.x-4,lBox.y-4,lBox.width+8,lBox.height+8).attr({"stroke":this.options.event.border,"fill":'#fff'}));
  				label.push(this.paper.rect(lBox.x-2,lBox.y-2,lBox.width+4,lBox.height+4).attr({"fill":dates[i].color || this.options.event.fill,"stroke-opacity":0}));
-				eventLabel.toFront();
+ 				label.push(eventLabel);
+ 				
+ 				eventLabel.toFront();
  				 				
  				if(i<this.options.maxEvents-1 || dates.length<=this.options.maxEvents)
  					returnLabel.push(label);
@@ -190,6 +194,9 @@ var Delorean = Class.create({
  		
  		this.positionLabel(returnLabel,dateLabel.getBBox().height,alt);
  		this.positionLabel(moreBox,dateLabel.getBBox().height,!alt);
+ 		
+ 		returnLabel.mouseover(this.highlight.bind(this,returnLabel));
+		returnLabel.mouseout(this.clearHighlight.bind(this));
  		return returnLabel;
  		 		
  	},
@@ -228,8 +235,9 @@ var Delorean = Class.create({
  	showMore: function(timeline,current){
  		timeline.labels.forEach(function(label){
  			if(current!=label)
- 				label.attr("fill-opacity",1/3);
+ 				label.attr("fill-opacity",1/5);
  		});
+ 		this.toFront();
  		this.show();
  	},
  	hideMore: function(timeline){
@@ -237,6 +245,18 @@ var Delorean = Class.create({
  			label.attr("fill-opacity",1);
  		});
  		this.hide();
+ 	},
+ 	highlight: function(current){
+ 		this.labels.forEach(function(label){
+ 			if(current!=label)
+ 				label.attr("fill-opacity",1/5);
+ 		});
+ 		current.toFront();
+ 	},
+ 	clearHighlight: function(){
+ 		this.labels.forEach(function(label){
+ 			label.attr("fill-opacity",1);
+ 		});
  	}
  	
 });
